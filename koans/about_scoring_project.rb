@@ -28,9 +28,45 @@ require 'edgecase'
 # More scoring examples are given in the tests below:
 #
 # Your goal is to write the score method.
+#
+def score_for(die)
+  return 50 if die == 5
+  return 100 if die == 1
+  return 0
+end
+
+def triplet?(dice)
+  dice.size == 3 and dice.uniq == [dice[0]]
+end
+
+def remove_triplet(array)
+  [] if triplet?(array)
+end
+
+def score_for_triplet(triplet,total=0)
+  if triplet == [1,1,1]
+    total += 1000
+  else
+    total += triplet[0] * 100
+  end
+
+  return total
+end
+
+def score_for_dice(dice)
+  dice.inject(0) do |total,die|
+      total += score_for(die)
+  end
+end
 
 def score(dice)
-  # You need to write this method
+  total, remaining_dice = 0, dice
+  if triplet?(dice)
+    total = score_for_triplet(dice)
+    remaining_dice = remove_triplet(dice)
+  end
+  total += score_for_dice(remaining_dice)
+  return total
 end
 
 class AboutScoringAssignment < EdgeCase::Koan
