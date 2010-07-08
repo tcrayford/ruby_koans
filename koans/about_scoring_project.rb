@@ -30,27 +30,9 @@ require 'edgecase'
 # Your goal is to write the score method.
 #
 def score_for(die)
-  return 50 if die == 5
-  return 100 if die == 1
-  return 0
-end
-
-def triplet?(dice)
-  dice.size == 3 and dice.uniq == [dice[0]]
-end
-
-def remove_triplet(array)
-  [] if triplet?(array)
-end
-
-def score_for_triplet(triplet,total=0)
-  if triplet == [1,1,1]
-    total += 1000
-  else
-    total += triplet[0] * 100
-  end
-
-  return total
+ return 50 if die == 5
+ return 100 if die == 1
+ return 0
 end
 
 def score_for_dice(dice)
@@ -59,14 +41,29 @@ def score_for_dice(dice)
   end
 end
 
-def score(dice)
-  total, remaining_dice = 0, dice
-  if triplet?(dice)
-    total = score_for_triplet(dice)
-    remaining_dice = remove_triplet(dice)
+def remove_triplet_of(n,rolls)
+  3.times do
+    rolls.delete_at(rolls.index(n))
   end
-  total += score_for_dice(remaining_dice)
-  return total
+  rolls
+end
+
+def score_for_triplet_of(n)
+  (n == 1) ? 1000 : 100*n
+end
+
+def score(dice)
+  return 0 if dice.empty?
+  total = 0
+  rolls = dice.dup
+  (1..6).each do |i| 
+    if rolls.count(i) >= 3
+      rolls = remove_triplet_of(i,rolls)
+      total += score_for_triplet_of(i)
+    end
+  end
+  total += score_for_dice(rolls)
+  total
 end
 
 class AboutScoringAssignment < EdgeCase::Koan
