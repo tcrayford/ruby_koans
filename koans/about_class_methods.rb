@@ -166,5 +166,4 @@ class AboutClassMethods < EdgeCase::Koan
     fido = Dog.new
     assert_equal :still_another_way, fido.class.another_class_method
   end
-
 end
