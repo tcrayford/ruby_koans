@@ -52,18 +52,20 @@ def score_for_triplet_of(n)
   (n == 1) ? 1000 : 100*n
 end
 
-def score(dice)
-  return 0 if dice.empty?
-  total = 0
-  rolls = dice.dup
+def score_and_remove_triplets(rolls,total=0)
   (1..6).each do |i| 
     if rolls.count(i) >= 3
       rolls = remove_triplet_of(i,rolls)
       total += score_for_triplet_of(i)
     end
   end
+  return rolls, total
+end
+
+def score(dice)
+  return 0 if dice.empty?
+  rolls,total = score_and_remove_triplets(dice)
   total += score_for_dice(rolls)
-  total
 end
 
 class AboutScoringAssignment < EdgeCase::Koan
